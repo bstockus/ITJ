@@ -1,4 +1,4 @@
-package chapter5.assignment13;
+package convenience.helpers;
 
 import javax.swing.JOptionPane;
 public class Input {

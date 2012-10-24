@@ -1,4 +1,4 @@
-package chapter5.assignment12.dialogs;
+package convenience.dialogs;
 
 import java.util.ArrayList;
 import java.util.List;

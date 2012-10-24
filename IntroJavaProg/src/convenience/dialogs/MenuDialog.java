@@ -1,4 +1,4 @@
-package chapter5.assignment12.dialogs;
+package convenience.dialogs;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

@@ -3,7 +3,8 @@ package chapter5.assignment12;
 import java.util.ArrayList;
 import java.util.List;
 
-import chapter5.assignment12.dialogs.Dialogs;
+import convenience.dialogs.Dialogs;
+
 import chapter5.assignment12.helpers.StringsHelper;
 
 public class TutorialStringsModule extends TutorialModule {

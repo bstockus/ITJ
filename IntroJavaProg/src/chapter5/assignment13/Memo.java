@@ -1,5 +1,9 @@
 package chapter5.assignment13;
 
+import convenience.helpers.Dates;
+import convenience.helpers.Input;
+import convenience.helpers.Strings;
+
 public class Memo {
 	
 	public static String NOM_IN;

@@ -1,4 +1,4 @@
-package chapter5.assignment12.dialogs;
+package convenience.dialogs;
 
 import javax.swing.JOptionPane;
 

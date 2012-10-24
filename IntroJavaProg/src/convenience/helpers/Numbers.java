@@ -1,4 +1,4 @@
-package chapter5.assignment13;
+package convenience.helpers;
 
 /**
  * This class [currently] contains three number methods
