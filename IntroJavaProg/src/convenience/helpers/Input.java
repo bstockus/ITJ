@@ -131,7 +131,16 @@ float 	answerFloat = 0;
 	  }
 	    
 
-	  
+	  public boolean getBoolean(String a, String b, int c)
+	    {
+	    	int answer = JOptionPane.showConfirmDialog(null,a,b,JOptionPane.YES_NO_OPTION); 
+	    	if (answer==0)
+	    	  {
+	    	  return true;
+	    	  }
+	    	else
+	    		return false;
+	    }
 	  
 	  
 	  
