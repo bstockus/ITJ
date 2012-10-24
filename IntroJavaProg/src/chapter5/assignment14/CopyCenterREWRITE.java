@@ -6,7 +6,18 @@ public class CopyCenterREWRITE {
 	
 	private static Integer getInput() {
 		Input input = new Input();
-		return input.getInteger("How many copies would you like?", "Enter # of Copies", 3);
+		for (;;) {
+			Integer numberOfCopies = input.getInteger("How many copies would you like?", "Enter # of Copies", 3);
+			if (numberOfCopies == null) {
+				System.exit(0);
+				return null;
+			} else if (numberOfCopies < 0) {
+				input.writeMessage("ERROR: How is it possible to make a negative number of copies?\nNumber of copies must be greater than or equal to 0.",
+						"INPUT ERROR", 1);
+			} else {
+				return numberOfCopies;
+			}
+		}
 	}
 	
 	private static Double calcCost(Integer numberOfCopies) {
