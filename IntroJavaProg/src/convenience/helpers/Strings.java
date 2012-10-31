@@ -100,11 +100,10 @@ public class Strings {
 	     }
 	     
 	     public Integer getLetterCount(Character letter, String string) {
-	    	 char[] charArray = string.toCharArray();
 	    	 Integer count = 0;
-	    	 for (char c: charArray) {
+	    	 for (char c: string.toCharArray()) {
 	    		 if (c == letter) {
-	    			 count++;
+	    			 count ++;
 	    		 }
 	    	 }
 	    	 

@@ -6,6 +6,7 @@ import convenience.dialogs.Dialogs;
 
 public class FurnitureStore {
 	
+	// Class Constants, NOT GLOBAL VARIABLES!!!
 	private static String[] tableTypeStrings = {"Pine", "Oak", "Mahogany"};
 	private static String[] tableSizeStrings = {"Small", "Medium", "Large"};
 	private static Double[][] tablePrices = {{80.00, 100.00, 150.00}, {230.00, 250.00, 300.00}, {280.00, 300.00, 350.00}};
