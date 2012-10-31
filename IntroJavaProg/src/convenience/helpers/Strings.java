@@ -80,5 +80,35 @@ public class Strings {
 	    		 return name + "\'s";
 	    	 }
 	     }
+	     
+	     public Boolean isFirstLetterUpperCase(String string) {
+	    	 Character firstLetter = string.charAt(0);
+	    	 if (Character.isUpperCase(firstLetter)) {
+	    		 return true;
+	    	 } else {
+	    		 return false;
+	    	 }
+	     }
+	     
+	     public Boolean isLastCharacterASymbol(String string) {
+	    	 Character lastCharacter = string.charAt(string.length() - 1);
+	    	 if ((lastCharacter == '.') || (lastCharacter == '?') || (lastCharacter == '!')) {
+	    		 return true;
+	    	 } else {
+	    		 return false;
+	    	 }
+	     }
+	     
+	     public Integer getLetterCount(Character letter, String string) {
+	    	 char[] charArray = string.toCharArray();
+	    	 Integer count = 0;
+	    	 for (char c: charArray) {
+	    		 if (c == letter) {
+	    			 count++;
+	    		 }
+	    	 }
+	    	 
+	    	 return count;
+	     }
 
 	}
