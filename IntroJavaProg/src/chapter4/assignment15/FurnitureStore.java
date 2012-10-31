@@ -1,49 +1,61 @@
 package chapter4.assignment15;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import convenience.dialogs.Dialogs;
 
 public class FurnitureStore {
 	
+	private static String[] tableTypeStrings = {"Pine", "Oak", "Mahogany"};
+	private static String[] tableSizeStrings = {"Small", "Medium", "Large"};
+	private static Double[][] tablePrices = {{80.00, 100.00, 150.00}, {230.00, 250.00, 300.00}, {280.00, 300.00, 350.00}};
+	
+	
+	private static Integer getTableType() {
+		Integer tableType = Dialogs.displayMenuDialog("TABLE COST MENU",
+				"Welcome to the Java Furniture Store <br/> Please select the type of your table:",
+				Arrays.asList(FurnitureStore.tableTypeStrings));
+		if (tableType == -1) {
+			FurnitureStore.exit();
+		}
+		return tableType;
+	}
+	
+	private static Integer getTableSize() {
+		Integer tableSize = Dialogs.displayMenuDialog("TABLE COST MENU",
+				"Welcome to the Java Furniture Store <br/> Please select the type of your table:",
+				Arrays.asList(FurnitureStore.tableSizeStrings));
+		if (tableSize == -1) {
+			FurnitureStore.exit();
+		}
+		return tableSize;
+	}
+	
+	private static void displayCost(Integer tableType, Integer tableSize) {
+		String tableCostString = String.format("$%.2f", FurnitureStore.tablePrices[tableType][tableSize]);
+		String tableTypeString = FurnitureStore.tableTypeStrings[tableType];
+		String tableSizeString = FurnitureStore.tableSizeStrings[tableSize];
+		
+		Dialogs.displayResultsDialog("TABLE IS PRICED", "The cost of your " + tableSizeString + " " + tableTypeString + " table is " + tableCostString + ".");
+	}
+	
+	private static void exit() {
+		Dialogs.displayInfoDialog("GOODBYE", "Thanks for shopping!");
+		System.exit(0);
+	}
+	
 	public static void main(String[] args) {
 		while (true) {
-			// Get Table Type
-			List<String> typeMenuEntries = new ArrayList<String>();
-			typeMenuEntries.add("PINE");
-			typeMenuEntries.add("OAK");
-			typeMenuEntries.add("MAHOGANY");
-			Integer tableType = Dialogs.displayMenuDialog("TABLE COST MENU", "Welcome to the Java Furniture Store <br/> Please select the type of your table:", 
-					typeMenuEntries);
-			if (tableType == -1) {
-				Dialogs.displayInfoDialog("GOODBYE", "Thanks for shopping!");
-				System.exit(0);
-			}
+			Integer tableType = FurnitureStore.getTableType();
+			Integer tableSize = FurnitureStore.getTableSize();
 			
-			// Get Table Size
-			List<String> sizeMenuEntries = new ArrayList<String>();
-			sizeMenuEntries.add("SMALL");
-			sizeMenuEntries.add("MEDIUM");
-			sizeMenuEntries.add("LARGE");
-			Integer tableSize = Dialogs.displayMenuDialog("TABLE COST MENU", "Welcome to the Java Furniture Store <br/> Please select the size of your table:", 
-					sizeMenuEntries);
-			if (tableSize == -1) {
-				Dialogs.displayInfoDialog("GOODBYE", "Thanks for shopping!");
-				System.exit(0);
-			}
-			
-			// Display Results
-			String[] tableTypeTable = {"Pine", "Oak", "Mahogany"};
-			String[] tableSizeTable = {"Small", "Medium", "Large"};
-			Double[][] tableCostTable = {{80.00, 100.00, 150.00}, {230.00, 250.00, 300.00}, {280.00, 300.00, 350.00}};
-			Double tableCost = tableCostTable[tableType][tableSize];
-			Dialogs.displayResultsDialog("TABLE IS PRICED", "The cost of your " + tableSizeTable[tableSize] + " " + tableTypeTable[tableType] + " table is $" + String.format("%.2f", tableCost) + ".");
+			FurnitureStore.displayCost(tableType, tableSize);
 			
 			// Ask If User Wants to Run Again
 			if(!(Dialogs.displayConfirmDialog("AGAIN?", "Would you like to price another table?"))) {
-				Dialogs.displayInfoDialog("GOODBYE", "Thanks for shopping!");
-				System.exit(0);
+				FurnitureStore.exit();
 			}
 			
 		}
