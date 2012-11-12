@@ -1,3 +1,12 @@
+/*
+ *  (c) Copyright 2012, Bryan Stockus
+ *  	Bryan Stockus <bstockus@gmail.com>
+ *  
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License version 3 as
+ *  published by the Free Software Foundation.
+ */
+
 package convenience.dialogs;
 
 import java.awt.event.ActionEvent;
