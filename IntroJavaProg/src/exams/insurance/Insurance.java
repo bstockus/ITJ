@@ -9,11 +9,12 @@ import exams.insurance.views.PromptInputView;
 
 public class Insurance {
 	
+	private static InputView INPUT_VIEW = new PromptInputView();
+	private static OutputView OUTPUT_VIEW = new FormOutputView();
+	
 	public static void main(String[] args) {
-		InputView inputView = new PromptInputView();
-		OutputView outputView = new FormOutputView();
-		Quote quote = inputView.getQuote();
-		outputView.displayOutputViewForQuote(quote);
+		Quote quote = Insurance.INPUT_VIEW.getQuote();
+		Insurance.OUTPUT_VIEW.displayOutputViewForQuote(quote);
 	}
 	
 }

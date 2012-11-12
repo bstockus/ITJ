@@ -39,6 +39,7 @@ public class QuoteOutputGenerator {
 		results += String.format("%-22s%s", "Marital Status", driverMaritalStatus) + lineSeperator;
 		results += String.format("%-22s%s", "Accident/Violation?", driverAccident) + lineSeperator + lineSeperator;
 		
+		
 		// Vehicle Information Section
 		results += String.format("%-20s%-50s%-50s%-50s", "", "LIABILITY", "COMPREHENSIVE", "COLLISION") + lineSeperator;
 		results += String.format("%-20s%-10s%-10s%-10s%-10s%-10s%-10s%-10s%-10s%-10s%-10s%-10s%-10s%-10s%-10s%-10s%-16s", "", "Base", "Age Chg", "MF Chg", "Acc Chg", "Total",
@@ -72,7 +73,17 @@ public class QuoteOutputGenerator {
 		// Footer Section
 		results += lineSeperator + lineSeperator + String.format("Thank you for your patronage.") + lineSeperator;
 		
-		return results;
+		String newResults = new String();
+		
+		for (char c: results.toCharArray()) {
+			if (c == ' ') {
+				newResults += " ";
+			} else {
+				newResults += c;
+			}
+		}
+		
+		return newResults;
 	}
 	
 }
