@@ -1,6 +1,7 @@
 package chapter7.assignment17;
 
 import java.util.ArrayList;
+//import java.util.Arrays;
 
 import convenience.dialogs.Dialogs;
 
@@ -19,15 +20,7 @@ public class TempsAboveAverage {
 		
 		ArrayList<Double> results = new ArrayList<Double>(Dialogs.displayMultiDoubleInputDialog("Temperature Values", "Enter temperature values:", labels, defaultValues));
 		
-		Double[] temperatures = (Double[]) results.toArray();
-		
-		Double sum = 0.0;
-		
-		for (Double temperature: temperatures) {
-			sum += temperature;
-		}
-		
-		Double average = sum / (numberOfTempValues.doubleValue());
+		System.out.println(results.toString());
 		
 	}
 	
