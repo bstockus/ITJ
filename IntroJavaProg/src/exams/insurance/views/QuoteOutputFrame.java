@@ -25,6 +25,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.RepaintManager;
 
+import convenience.dialogs.Dialogs;
+
 public class QuoteOutputFrame implements Runnable, ActionListener, Printable {
 	
 	private static String PRINT_BUTTON_ACTION_COMMAND = "print";
@@ -85,34 +87,44 @@ public class QuoteOutputFrame implements Runnable, ActionListener, Printable {
 	public void actionPerformed(ActionEvent actionEvent) {
 		String actionCommand = actionEvent.getActionCommand();
 		if (actionCommand.equals(QuoteOutputFrame.PRINT_BUTTON_ACTION_COMMAND)) {
-			PrinterJob printJob = PrinterJob.getPrinterJob();
-			printJob.setPrintable(this);
-			if (printJob.printDialog()) {
-				try { 
-					printJob.print();
-				} catch(PrinterException pe) {
-					System.out.println("Error printing: " + pe);
-				}
-			}
+			this.actionPerformedOnPrintButton();
 		} else if (actionCommand.equals(QuoteOutputFrame.EXIT_BUTTON_ACTION_COMMAND)) {
-			System.exit(0);
+			this.actionPerformedOnExitButton();
 		} else if (actionCommand.equals(QuoteOutputFrame.SAVE_BUTTON_ACTION_COMMAND)) {
-			JFileChooser fileChooser = new JFileChooser();
-			if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
-				File file = fileChooser.getSelectedFile();
-				try {
-					file.createNewFile();
-					FileWriter fileWriter = new FileWriter(file);
-					fileWriter.write(this.quotePrintOutput);
-					fileWriter.close();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-			}
+			this.actionPerformedOnSaveButton();
 		}
 		
+	}
+	
+	private void actionPerformedOnPrintButton() {
+		PrinterJob printJob = PrinterJob.getPrinterJob();
+		printJob.setPrintable(this);
+		if (printJob.printDialog()) {
+			try { 
+				printJob.print();
+			} catch(PrinterException pe) {
+				System.out.println("Error printing: " + pe);
+			}
+		}
+	}
+	
+	private void actionPerformedOnExitButton() {
+		System.exit(0);
+	}
+	
+	private void actionPerformedOnSaveButton() {
+		JFileChooser fileChooser = new JFileChooser();
+		if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+			File file = fileChooser.getSelectedFile();
+			try {
+				file.createNewFile();
+				FileWriter fileWriter = new FileWriter(file);
+				fileWriter.write(this.quotePrintOutput);
+				fileWriter.close();
+			} catch (IOException e) {
+				Dialogs.displayErrorDialog("I/O Error", "An I/O Exception has occurued while trying to save this file. \nTerminating save operation.");
+			}
+		}
 	}
 
 	@Override

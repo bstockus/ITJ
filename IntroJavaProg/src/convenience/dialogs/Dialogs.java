@@ -12,6 +12,7 @@ package convenience.dialogs;
 import javax.swing.JOptionPane;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 import java.util.List;
 import javax.swing.SwingUtilities;
 
@@ -92,6 +93,10 @@ public class Dialogs {
 		}
 	}
 	
+	public static Integer displayMenuDialog(String title, String menuHeader, String[] menuEntries) {
+		return Dialogs.displayMenuDialog(title, menuHeader, Arrays.asList(menuEntries));
+	}
+	
 	public static String displayStringInputDialog(String title, String inputMessage, Boolean emptyInputAllowed) {
 		for (;;) {
 			String results = JOptionPane.showInputDialog(null, inputMessage, title, JOptionPane.QUESTION_MESSAGE);
@@ -132,6 +137,10 @@ public class Dialogs {
 			}
 		}
 		return multiStringInputDialog.getResults();
+	}
+	
+	public static String[] displayMultiStringInputDialog(String title, String inputMessage, String[] inputLabels, Boolean emptyInputAllowed) {
+		return (String[])((Dialogs.displayMultiStringInputDialog(title, inputMessage, Arrays.asList(inputLabels), emptyInputAllowed)).toArray());
 	}
 	
 	public static Integer displayIntegerInputDialog(String title, String inputMessage, Integer defaultValue) {
@@ -176,6 +185,10 @@ public class Dialogs {
 		return multiIntegerInputDialog.getResults();
 	}
 	
+	public static Integer[] displayMultiIntegerInputDialog(String title, String inputMessage, String[] inputLabels, Integer[] defaultValues) {
+		return (Integer[])((Dialogs.displayMultiIntegerInputDialog(title, inputMessage, Arrays.asList(inputLabels), Arrays.asList(defaultValues)).toArray()));
+	}
+	
 	public static Double displayDoubleInputDialog(String title, String inputMessage, Double defaultValue) {
 		for (;;) {
 			String results = JOptionPane.showInputDialog(null, inputMessage, title, JOptionPane.QUESTION_MESSAGE);
@@ -199,8 +212,23 @@ public class Dialogs {
 	
 	public static List<Double> displayMultiDoubleInputDialog(String title, String inputMessage, List<String> inputLabels,
 			List<Double> defaultValues) {
-		// TODO: Implement
-		return null;
+		MultiDoubleInputDialog multiDoubleInputDialog = new MultiDoubleInputDialog(title, inputMessage, inputLabels,
+				defaultValues);
+		try {
+			SwingUtilities.invokeAndWait(multiDoubleInputDialog);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
+		while (multiDoubleInputDialog.isRunning()) {
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		return multiDoubleInputDialog.getResults();
 	}
 	
 }
