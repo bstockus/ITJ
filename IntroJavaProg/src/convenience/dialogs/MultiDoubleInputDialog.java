@@ -43,7 +43,12 @@ public class MultiDoubleInputDialog extends MultiInputDialog {
 					this.results.add(Double.parseDouble(inputTextField));
 				}
 			} else {
-				this.results.add(this.getDefaultValues().get(index));
+				if (this.getDefaultValues().get(index) == null) {
+					valid = false;
+					break;
+				} else {
+					this.results.add(this.getDefaultValues().get(index));
+				}
 			}
 		}
 		if (valid) {
@@ -66,6 +71,21 @@ public class MultiDoubleInputDialog extends MultiInputDialog {
 	public void run() {
 		// Call superclass method
 		super.run();
+	}
+
+	@Override
+	public String getInitialValueForFieldAtIndex(Integer index) {
+		if (this.getDefaultValues().get(index) == null) {
+			return "";
+		} else {
+			return this.getDefaultValues().get(index).toString();
+		}
+	}
+
+	@Override
+	public Boolean isValidForFieldAtIndex(Integer index) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

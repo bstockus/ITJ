@@ -12,6 +12,7 @@ package convenience.dialogs;
 import javax.swing.JOptionPane;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import javax.swing.SwingUtilities;
@@ -150,7 +151,14 @@ public class Dialogs {
 				System.exit(0);
 			}
 			if (results.length() == 0) {
-				return defaultValue;
+				if (defaultValue == null) {
+					Dialogs.displayErrorDialog("INPUT ERROR", "You must enter a value!");
+					if (Dialogs.EXIT_ON_INPUT_ERROR) {
+						System.exit(0);
+					}
+				} else {
+					return defaultValue;
+				}
 			} else {
 				if (results.matches("-?\\d+(.\\d+)?")) {
 					return Integer.parseInt(results);
@@ -229,6 +237,16 @@ public class Dialogs {
 			}
 		}
 		return multiDoubleInputDialog.getResults();
+	}
+	
+	public static Double[] displayMultiDoubleInputDialog(String title, String inputMessage, String[] inputLabels, Double[] defaultValues) {
+		ArrayList<Double> results = new ArrayList<Double>(Dialogs.displayMultiDoubleInputDialog(title, inputMessage, Arrays.asList(inputLabels), 
+				Arrays.asList(defaultValues)));
+		Double[] resultsArray = new Double[results.size()];
+		for (Integer index = 0; index < results.size(); index ++) {
+			resultsArray[index] = results.get(index);
+		}
+		return resultsArray;
 	}
 	
 }

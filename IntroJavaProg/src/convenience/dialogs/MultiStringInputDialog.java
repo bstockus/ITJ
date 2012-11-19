@@ -70,5 +70,17 @@ public class MultiStringInputDialog extends MultiInputDialog {
 		// Call superclass method
 		super.run();
 	}
+
+	@Override
+	public String getInitialValueForFieldAtIndex(Integer index) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Boolean isValidForFieldAtIndex(Integer index) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }
