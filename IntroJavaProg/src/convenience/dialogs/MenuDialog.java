@@ -33,6 +33,7 @@ public class MenuDialog implements Runnable, ActionListener, WindowListener {
 	// Instance Variables
 	private String menuTitle = "";
 	private String menuHeader = "";
+	private String exitLabelText = "";
 	private ArrayList<String> menuEntries = null;
 	private Integer results = 0;
 	private Boolean running = false;
@@ -43,6 +44,10 @@ public class MenuDialog implements Runnable, ActionListener, WindowListener {
 	
 	public String getMenuHeader() {
 		return this.menuHeader;
+	}
+	
+	public String getExitLabelText() {
+		return this.exitLabelText;
 	}
 	
 	public List<String> getMenuEntries() {
@@ -78,11 +83,12 @@ public class MenuDialog implements Runnable, ActionListener, WindowListener {
 		this.running = false;
 	}
 	
-	public MenuDialog(String menuTitle, String menuHeader, List<String> menuEntries) {
+	public MenuDialog(String menuTitle, String menuHeader, List<String> menuEntries, String exitLabelText) {
 		// Initialize Instance Variables
 		this.menuTitle = menuTitle;
 		this.menuHeader = menuHeader;
 		this.menuEntries = new ArrayList<String>(menuEntries);
+		this.exitLabelText = exitLabelText;
 		
 		// Initialize GUI Variables
 		this.dialogFrame = new JFrame();
@@ -114,7 +120,11 @@ public class MenuDialog implements Runnable, ActionListener, WindowListener {
 		this.dialogFrame.getContentPane().add(this.dialogDescriptionLabel);
 		
 		// Setup dialogExitButton
-		this.dialogExitButton.setText(MenuDialog.DIALOG_EXIT_BUTTON_TEXT);
+		if (this.exitLabelText == null) {
+			this.dialogExitButton.setText(MenuDialog.DIALOG_EXIT_BUTTON_TEXT);
+		} else {
+			this.dialogExitButton.setText(this.exitLabelText);
+		}
 		this.dialogExitButton.setActionCommand(MenuDialog.DIALOG_EXIT_BUTTON_ACTION_COMMAND);
 		this.dialogExitButton.addActionListener(this);
 		this.dialogFrame.getContentPane().add(this.dialogExitButton);

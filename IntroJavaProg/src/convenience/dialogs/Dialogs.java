@@ -52,7 +52,7 @@ public class Dialogs {
 		JOptionPane.showMessageDialog(null, resultsMessage, title, JOptionPane.PLAIN_MESSAGE);
 	}
 	
-	public static Integer displayMenuDialog(String title, String menuHeader, List<String> menuEntries) {
+	public static Integer displayMenuDialog(String title, String menuHeader, List<String> menuEntries, String exitLabel) {
 		if (Dialogs.USE_LEGACY_MENU_DIALOGS) {
 			for (;;) {
 				String inputMessage = "<html>" + menuHeader;
@@ -75,7 +75,7 @@ public class Dialogs {
 				}
 			}
 		} else {
-			MenuDialog menuDialog = new MenuDialog(title, "<html>" + menuHeader + "</html>", menuEntries);
+			MenuDialog menuDialog = new MenuDialog(title, "<html>" + menuHeader + "</html>", menuEntries, exitLabel);
 			try {
 				SwingUtilities.invokeAndWait(menuDialog);
 			} catch (InterruptedException e) {
@@ -94,8 +94,16 @@ public class Dialogs {
 		}
 	}
 	
+	public static Integer displayMenuDialog(String title, String menuHeader, List<String> menuEntries) {
+		return Dialogs.displayMenuDialog(title, menuHeader, menuEntries, null);
+	}
+	
 	public static Integer displayMenuDialog(String title, String menuHeader, String[] menuEntries) {
-		return Dialogs.displayMenuDialog(title, menuHeader, Arrays.asList(menuEntries));
+		return Dialogs.displayMenuDialog(title, menuHeader, Arrays.asList(menuEntries), null);
+	}
+	
+	public static Integer displayMenuDialog(String title, String menuHeader, String[] menuEntries, String exitLabel) {
+		return Dialogs.displayMenuDialog(title, menuHeader, Arrays.asList(menuEntries), exitLabel);
 	}
 	
 	public static String displayStringInputDialog(String title, String inputMessage, Boolean emptyInputAllowed) {
@@ -141,7 +149,13 @@ public class Dialogs {
 	}
 	
 	public static String[] displayMultiStringInputDialog(String title, String inputMessage, String[] inputLabels, Boolean emptyInputAllowed) {
-		return (String[])((Dialogs.displayMultiStringInputDialog(title, inputMessage, Arrays.asList(inputLabels), emptyInputAllowed)).toArray());
+		ArrayList<String> results = new ArrayList<String>(Dialogs.displayMultiStringInputDialog(title, inputMessage, Arrays.asList(inputLabels), 
+				emptyInputAllowed));
+		String[] resultsArray = new String[results.size()];
+		for (Integer index = 0; index < results.size(); index ++) {
+			resultsArray[index] = results.get(index);
+		}
+		return resultsArray;
 	}
 	
 	public static Integer displayIntegerInputDialog(String title, String inputMessage, Integer defaultValue) {
@@ -194,7 +208,13 @@ public class Dialogs {
 	}
 	
 	public static Integer[] displayMultiIntegerInputDialog(String title, String inputMessage, String[] inputLabels, Integer[] defaultValues) {
-		return (Integer[])((Dialogs.displayMultiIntegerInputDialog(title, inputMessage, Arrays.asList(inputLabels), Arrays.asList(defaultValues)).toArray()));
+		ArrayList<Integer> results = new ArrayList<Integer>(Dialogs.displayMultiIntegerInputDialog(title, inputMessage, Arrays.asList(inputLabels), 
+				Arrays.asList(defaultValues)));
+		Integer[] resultsArray = new Integer[results.size()];
+		for (Integer index = 0; index < results.size(); index ++) {
+			resultsArray[index] = results.get(index);
+		}
+		return resultsArray;
 	}
 	
 	public static Double displayDoubleInputDialog(String title, String inputMessage, Double defaultValue) {

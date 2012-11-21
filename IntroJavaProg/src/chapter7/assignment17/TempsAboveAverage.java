@@ -5,8 +5,19 @@ import convenience.dialogs.Dialogs;
 public class TempsAboveAverage {
 
 	public static void main(String[] args) {
-		Integer numberOfTempValues = Dialogs.displayIntegerInputDialog("Number of Values", "How many temperature values would you like to enter?", 1);
-				
+		Integer numberOfTempValues;
+		
+		while (true) {
+			numberOfTempValues = Dialogs.displayIntegerInputDialog("Number of Values", "How many temperature values would you like to enter?", 1);
+			if (numberOfTempValues <= 0) {
+				Dialogs.displayErrorDialog("INPUT ERROR", "Value must be greater than 0!");
+			} else if (numberOfTempValues > 1000) {
+				Dialogs.displayErrorDialog("INPUT ERROR", "Value must be less than or equal to 1000!");
+			} else {
+				break;
+			}
+		}
+		
 		String[] labels = new String[numberOfTempValues];
 		Double[] defaultValues = new Double[numberOfTempValues];
 		
