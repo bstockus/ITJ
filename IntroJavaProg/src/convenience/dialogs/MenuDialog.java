@@ -9,6 +9,7 @@
 
 package convenience.dialogs;
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
@@ -104,10 +105,10 @@ public class MenuDialog implements Runnable, ActionListener, WindowListener {
 			String dialogMenuEntryButtonActionCommand = MenuDialog.DIALOG_MENU_ENTRY_BUTTON_ACTION_COMMAND_BASE + index.toString();
 			dialogMenuEntryButton.setText(menuEntry);
 			dialogMenuEntryButton.setActionCommand(dialogMenuEntryButtonActionCommand);
-			dialogMenuEntryButton.addActionListener(this);
+			dialogMenuEntryButton.addActionListener(this);			
 			this.dialogMenuEntryButtons.add(dialogMenuEntryButton);
 			this.dialogMenuEntryButtonActionCommands.add(dialogMenuEntryButtonActionCommand);
-			index++;
+			index ++;
 		}
 		
 		// Setup dialogFrame
