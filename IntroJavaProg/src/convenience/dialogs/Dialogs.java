@@ -27,6 +27,10 @@ public class Dialogs {
 		JOptionPane.showMessageDialog(null, errorMessage, title, JOptionPane.ERROR_MESSAGE);
 	}
 	
+	public static void displayErrorDialog(String title, Exception exception) {
+		Dialogs.displayErrorDialog(title, exception.getMessage());
+	}
+	
 	public static void displayWarningDialog(String title, String warningMessage) {
 		JOptionPane.showMessageDialog(null, warningMessage, title, JOptionPane.WARNING_MESSAGE);
 	}

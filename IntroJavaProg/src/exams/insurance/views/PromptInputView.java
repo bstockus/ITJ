@@ -43,39 +43,53 @@ public class PromptInputView implements InputView {
 	
 	private Integer getDriverAge() {
 		while (true) {
-			Integer age = Dialogs.displayIntegerInputDialog("DRIVER INPUT", "Enter Driver's current age", 16);
-			if (age < PromptInputView.MINIMUM_DRIVER_AGE) {
-				Dialogs.displayErrorDialog("DRIVER INPUT ERROR", "ERROR: You must enter a value that is greater than or equal to " + PromptInputView.MINIMUM_DRIVER_AGE.toString() + ".");
-			} else {
+			try {
+				Integer age = Dialogs.displayIntegerInputDialog("DRIVER INPUT", "Enter Driver's current age", 16);
+				if (age < PromptInputView.MINIMUM_DRIVER_AGE) {
+					throw new Exception ("ERROR: Driver's age must be greater than or equal to 16.");
+				}
 				return age;
+			} catch (Exception e) {
+				Dialogs.displayErrorDialog("INPUT ERROR", e);
 			}
 		}
-		
 	}
 	
 	private Driver.Gender getDriverGender() {
 		while (true) {
-			String input = Dialogs.displayStringInputDialog("DRIVER INPUT", "Enter Driver's gender (\'M\'/\'F\')", false);
-			if (input.equalsIgnoreCase("M")) {
-				return Driver.Gender.MALE;
-			} else if (input.equalsIgnoreCase("F")) {
-				return Driver.Gender.FEMALE;
-			} else {
-				Dialogs.displayErrorDialog("DRIVER INPUT ERROR", "ERROR: You must enter a: \'M\', \'m\', \'F\', or \'f\'.");
+			try {
+				String input = Dialogs.displayStringInputDialog("DRIVER INPUT", "Enter Driver's gender (\'M\'/\'F\')", false);
+				if (input.equalsIgnoreCase("M")) {
+					return Driver.Gender.MALE;
+				} else if (input.equalsIgnoreCase("F")) {
+					return Driver.Gender.FEMALE;
+				} else {
+					throw new Exception("ERROR: You must enter a: \'M\', \'m\', \'F\', or \'f\'.");
+				}
+			} catch (Exception e) {
+				Dialogs.displayErrorDialog("INPUT ERROR", e);
 			}
+			
+			
 		}
 	}
 	
 	private Driver.MaritalStatus getDriverMaritalStatus() {
 		while (true) {
-			String input = Dialogs.displayStringInputDialog("DRIVER INPUT", "Enter Driver's marital status (\'M\'/\'S\')", false);
-			if (input.equalsIgnoreCase("M")) {
-				return Driver.MaritalStatus.MARRIED;
-			} else if (input.equalsIgnoreCase("S")) {
-				return Driver.MaritalStatus.SINGLE;
-			} else {
-				Dialogs.displayErrorDialog("DRIVER INPUT ERROR", "ERROR: You must enter a: \'M\', \'m\', \'S\', or \'s\'.");
+			try {
+				String input = Dialogs.displayStringInputDialog("DRIVER INPUT", "Enter Driver's marital status (\'M\'/\'S\')", false);
+				if (input.equalsIgnoreCase("M")) {
+					return Driver.MaritalStatus.MARRIED;
+				} else if (input.equalsIgnoreCase("S")) {
+					return Driver.MaritalStatus.SINGLE;
+				} else {
+					throw new Exception("ERROR: You must enter a: \'M\', \'m\', \'S\', or \'s\'.");
+				}
+			} catch (Exception e) {
+				Dialogs.displayErrorDialog("INPUT ERROR", e);
 			}
+			
+			
 		}
 	}
 	
@@ -116,13 +130,18 @@ public class PromptInputView implements InputView {
 	
 	private Integer getVehicleYear(Integer index) {
 		while (true) {
-			Integer year = Dialogs.displayIntegerInputDialog("VEHICLE #" + index.toString() + " INPUT", "Enter the year of Vehicle #" + index.toString(), 2000);
-			if ((year < PromptInputView.MINIMUM_VEHICLE_YEAR) || (year > PromptInputView.MAXIMUM_VEHICLE_YEAR)) {
-				Dialogs.displayErrorDialog("VEHICLE #" + index.toString() + " INPUT ERROR", "You must enter a year between " + PromptInputView.MINIMUM_VEHICLE_YEAR.toString() +
-						" and " + PromptInputView.MAXIMUM_VEHICLE_YEAR.toString());
-			} else {
+			try {
+				Integer year = Dialogs.displayIntegerInputDialog("VEHICLE #" + index.toString() + " INPUT", "Enter the year of Vehicle #" + index.toString(), 2000);
+				if ((year < PromptInputView.MINIMUM_VEHICLE_YEAR) || (year > PromptInputView.MAXIMUM_VEHICLE_YEAR)) {
+					throw new Exception("You must enter a year between " + PromptInputView.MINIMUM_VEHICLE_YEAR.toString() +
+							" and " + PromptInputView.MAXIMUM_VEHICLE_YEAR.toString());
+				}
 				return year;
+			} catch (Exception e) {
+				Dialogs.displayErrorDialog("INPUT ERROR", e);
 			}
+			
+			
 		}
 	}
 	
