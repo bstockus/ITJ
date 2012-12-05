@@ -1,0 +1,9 @@
+123456 Johnson Richard A 22 700.00
+345343 Otwell Bonnie C 22 400.00
+894872 Eddy Sarah J 22 600.00 
+998738 Smith Emily A 33 700.00
+948943 Chayer Rachel F 33 500.00 
+732772 Phillips Jennifer H 44 600.00
+908732 Johnson Luke E 45 400.00
+732772 Nelson Leif H 45 600.00
+908732 Merson Jeff E 45 200.00
