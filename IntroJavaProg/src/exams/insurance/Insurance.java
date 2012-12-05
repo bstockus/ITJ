@@ -7,6 +7,7 @@ import exams.insurance.views.InputView;
 import exams.insurance.views.OutputView;
 import exams.insurance.views.PromptInputView;
 
+@SuppressWarnings("unused")
 public class Insurance {
 	
 	private static InputView INPUT_VIEW = new PromptInputView();

@@ -22,6 +22,7 @@ public class LunchGUI implements Runnable, ActionListener {
 	private static String[] dayNames = {"Monday","Tuesday","Wednesday","Thursday","Friday"};
 	
 	private JFrame frame;
+	@SuppressWarnings("unused")
 	private JTextField[] dayTextFields;
 	private JLabel subTotalResultLabel;
 	private JLabel taxResultLabel;

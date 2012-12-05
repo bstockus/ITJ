@@ -23,6 +23,7 @@ public class Demo1 {
 		double[] cost = new double[7];
 
 		//or you could declare and initialize at the same time
+		@SuppressWarnings("unused")
 		double[] cost2 = {22,33,67,54.8,11,98.3,3};
 
 		// or you could load the array values like this:

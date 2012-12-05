@@ -14,7 +14,6 @@ public class FirstProgram {
 		
 		int n1, n2;
 		
-		@SuppressWarnings("resource")
 		Scanner keyboard = new Scanner(System.in);
 		n1 = keyboard.nextInt();
 		n2 = keyboard.nextInt();
