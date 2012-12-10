@@ -9,95 +9,118 @@ import convenience.Console;
 
 public class EmployeeSalesRep {
 	
-	private static final String[] FIELD_NAMES = {"Emp #", "Last Name", "First Name", "MI", "Sales Rep", "Commission"};
+	private static final String FILE_NAME = "EmployeeSalesRep.txt";
+	private static final String[] FIELD_NAMES = {"Emp#", "Last Name", "First Name", "MI", "Rep", "Commission"};
+	private static final Integer[] FIELD_COLUMN_WIDTHS = {6, 20, 20, 2, 3, 10};
+	private static final Integer TOTAL_COLUMN_LEFT_WIDTH = 55;
+	private static final Integer TOTAL_COLUMN_RIGHT_WIDTH = 10;
 	private static final Integer SORT_BY_FIELD_INDEX = 4;
 	private static final Integer SUM_BY_FIELD_INDEX = 5;
 	
 	public static void main(String[] args) {
-		File file = new File("EmployeeSalesRep.txt");
-		
+		Integer recordCount = EmployeeSalesRep.getFileRecordCount();
+		String[][] fileRecords = EmployeeSalesRep.getFileRecords(recordCount);
+		ArrayList<String> recordGroups = EmployeeSalesRep.getUniqueSortByFieldValues(fileRecords);
+		Double totalSum = 0.0;
+		for (String sortByColumnValue: recordGroups) {
+			totalSum += EmployeeSalesRep.printRecordsForRecordGroupAndGetSum(fileRecords, sortByColumnValue);
+		}
+		EmployeeSalesRep.printFooter(totalSum);
+	}
+	
+	private static Scanner getFileScanner() {
+		File file = new File(EmployeeSalesRep.FILE_NAME);
 		try {
 			Scanner scanner = new Scanner(file);
-			
-			// Get the length of the file
-			Integer lineCounter = 0;
-			while (scanner.hasNextLine()) {
-				lineCounter ++;
-				scanner.nextLine();
-			}
-			
-			//System.out.println(lineCounter);
-			
-			scanner.close();
-			scanner = new Scanner(file);
-			
-			String[][] fields = new String[lineCounter][EmployeeSalesRep.FIELD_NAMES.length];
-			
-			for (Integer recordIndex = 0; recordIndex < lineCounter; recordIndex ++) {
-				for (Integer fieldIndex = 0; fieldIndex < EmployeeSalesRep.FIELD_NAMES.length; fieldIndex ++) {
-					fields[recordIndex][fieldIndex] = scanner.next();
-				}
-			}
-			
-			scanner.close();
-			
-			//Console.printArrayWithHeaders(EmployeeSalesRep.FIELD_NAMES, fields, 20);
-			
-			// Determine the number of different Sales Rep Codes
-			ArrayList<String> salesRepCodes = new ArrayList<String>();
-			for (Integer index = 0; index < fields.length; index ++) {
-				String salesRepForRecord = fields[index][EmployeeSalesRep.SORT_BY_FIELD_INDEX];
-				Boolean foundMatch = false;
-				for (String salesRepCode: salesRepCodes) {
-					if (salesRepCode.equals(salesRepForRecord)) {
-						foundMatch = true;
-						break;
-					}
-				}
-				if (!foundMatch) {
-					salesRepCodes.add(salesRepForRecord);
-				}
-			}
-			
-			//System.out.print(salesRepCodes.size());
-			
-			// Create And Populate Array for holding subtotals
-			Double[] subtotals = new Double[salesRepCodes.size()];
-			for (Integer index = 0; index < subtotals.length; index ++) {
-				subtotals[index] = 0.0;
-			}
-			for (Integer index = 0; index < fields.length; index ++) {
-				Integer salesRepCodeIndex = salesRepCodes.indexOf(fields[index][EmployeeSalesRep.SORT_BY_FIELD_INDEX]);
-				Double comission = Double.parseDouble(fields[index][EmployeeSalesRep.SUM_BY_FIELD_INDEX]);
-				subtotals[salesRepCodeIndex] += comission;
-			}
-			
-			// Print each column
-			for (Integer index = 0; index < salesRepCodes.size(); index ++) {
-				String salesRepCode = salesRepCodes.get(index);
-				// Print Header
-				for (String header: EmployeeSalesRep.FIELD_NAMES) {
-					System.out.printf("%20s", header);
-				}
-				System.out.printf("\n");
-				// Enumerate Data Columns
-				for (Integer recordIndex = 0; recordIndex < fields.length; recordIndex ++) {
-					if (salesRepCode.equals(fields[recordIndex][EmployeeSalesRep.SORT_BY_FIELD_INDEX])) {
-						for (Integer fieldIndex = 0; fieldIndex < EmployeeSalesRep.FIELD_NAMES.length; fieldIndex ++) {
-							System.out.printf("%20s", fields[recordIndex][fieldIndex]);
-						}
-						System.out.printf("\n");
-					}
-				}
-				System.out.printf("Subtotal: %.2f\n\n", subtotals[index]);
-				
-			}
-			
+			return scanner;
 		} catch (FileNotFoundException e) {
-			System.out.println("ERROR: Could not find the file!");
+			Console.printError("File Not Found!");
+			System.exit(0);
 		}
-		
-		
+		return null;
+	}
+	
+	private static Integer getFileRecordCount() {
+		Scanner scanner = EmployeeSalesRep.getFileScanner();
+		Integer count = 0;
+		while (scanner.hasNextLine()) {
+			count ++;
+			scanner.nextLine();
+		}
+		scanner.close();
+		return count;
+	}
+	
+	private static String[][] getFileRecords(Integer recordCount) {
+		Scanner scanner = EmployeeSalesRep.getFileScanner();
+		String[][] records = new String[recordCount][EmployeeSalesRep.FIELD_NAMES.length];
+		for (Integer recordIndex = 0; recordIndex < recordCount; recordIndex ++) {
+			for (Integer fieldIndex = 0; fieldIndex < EmployeeSalesRep.FIELD_NAMES.length; fieldIndex ++) {
+				records[recordIndex][fieldIndex] = scanner.next();
+			}
+		}
+		scanner.close();
+		return records;
+	}
+	
+	private static ArrayList<String> getUniqueSortByFieldValues(String[][] fileRecords) {
+		ArrayList<String> values = new ArrayList<String>();
+		for (Integer index = 0; index < fileRecords.length; index ++) {
+			String value = fileRecords[index][EmployeeSalesRep.SORT_BY_FIELD_INDEX];
+			if (!(values.contains(value))) {
+				values.add(value);
+			}
+		}
+		return values;
+	}
+	
+	private static Double printRecordsForRecordGroupAndGetSum(String[][] fileRecords, String sortByColumnValue) {
+		EmployeeSalesRep.printRecordGroupHeader();
+		Double sum = 0.0;
+		for (Integer recordIndex = 0; recordIndex < fileRecords.length; recordIndex ++) {
+			if ((fileRecords[recordIndex][EmployeeSalesRep.SORT_BY_FIELD_INDEX]).equals(sortByColumnValue)) {
+				EmployeeSalesRep.printRecordAtIndex(fileRecords, recordIndex);
+				sum += Double.parseDouble(fileRecords[recordIndex][EmployeeSalesRep.SUM_BY_FIELD_INDEX]);
+			}
+		}
+		EmployeeSalesRep.printRecordGroupFooter(sortByColumnValue, sum);
+		return sum;
+	}
+	
+	private static void printRecordGroupHeader() {
+		// Print Field Names
+		for (Integer index = 0; index < EmployeeSalesRep.FIELD_NAMES.length; index ++) {
+			String printfCommandString = "%-" + EmployeeSalesRep.FIELD_COLUMN_WIDTHS[index].toString() + "s ";
+			System.out.printf(printfCommandString, EmployeeSalesRep.FIELD_NAMES[index]);
+		}
+		System.out.printf("\n");
+		// Print Header Dashes
+		for (Integer index = 0; index < EmployeeSalesRep.FIELD_NAMES.length; index ++) {
+			for (Integer dashIndex = 0; dashIndex < EmployeeSalesRep.FIELD_COLUMN_WIDTHS[index]; dashIndex ++) {
+				System.out.printf("=");
+			}
+			System.out.printf(" ");
+		}
+		System.out.printf("\n");
+	}
+	
+	private static void printRecordAtIndex(String[][] fileRecords, Integer recordIndex) {
+		for (Integer index = 0; index < EmployeeSalesRep.FIELD_NAMES.length; index ++) {
+			String printfCommandString = "%-" + EmployeeSalesRep.FIELD_COLUMN_WIDTHS[index].toString() + "s ";
+			System.out.printf(printfCommandString, fileRecords[recordIndex][index]);
+		}
+		System.out.printf("\n");
+	}
+	
+	private static void printRecordGroupFooter(String sortByColumnValue, Double sumByColumnValue) {
+		String printfCommandString = "%" + EmployeeSalesRep.TOTAL_COLUMN_LEFT_WIDTH.toString() + "s %-" + EmployeeSalesRep.TOTAL_COLUMN_RIGHT_WIDTH.toString() + "s\n\n";
+		String leftString = "Total for " + EmployeeSalesRep.FIELD_NAMES[EmployeeSalesRep.SORT_BY_FIELD_INDEX] + " " + sortByColumnValue + ":";
+		System.out.printf(printfCommandString, leftString, sumByColumnValue);
+	}
+	
+	private static void printFooter(Double totalSum) {
+		String printfCommandString = "%" + EmployeeSalesRep.TOTAL_COLUMN_LEFT_WIDTH.toString() + "s %-" + EmployeeSalesRep.TOTAL_COLUMN_RIGHT_WIDTH.toString() + "s\n";
+		System.out.printf(printfCommandString, "Total:", totalSum);
 	}
 	
 }

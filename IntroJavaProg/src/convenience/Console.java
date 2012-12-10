@@ -21,4 +21,8 @@ public class Console {
 		}
 	}
 	
+	public static void printError(String message) {
+		System.out.printf("ERROR: %s", message);
+	}
+	
 }
