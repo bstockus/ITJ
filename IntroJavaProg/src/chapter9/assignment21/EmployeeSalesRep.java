@@ -3,6 +3,7 @@ package chapter9.assignment21;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Scanner;
 
 import convenience.Console;
@@ -18,9 +19,22 @@ public class EmployeeSalesRep {
 	private static final Integer SUM_BY_FIELD_INDEX = 5;
 	
 	public static void main(String[] args) {
-		Integer recordCount = EmployeeSalesRep.getFileRecordCount();
-		String[][] fileRecords = EmployeeSalesRep.getFileRecords(recordCount);
-		ArrayList<String> recordGroups = EmployeeSalesRep.getUniqueSortByFieldValues(fileRecords);
+		Scanner scanner = EmployeeSalesRep.getFileScanner();
+		ArrayList<String[]> fileRecordsList = new ArrayList<String[]>();
+		HashSet<String> uniqueSortValues = new HashSet<String>();
+		Integer fieldCount = EmployeeSalesRep.FIELD_NAMES.length;
+		while (scanner.hasNext()) {
+			String[] record = new String[fieldCount];
+			for (Integer fieldIndex = 0; fieldIndex < EmployeeSalesRep.FIELD_NAMES.length; fieldIndex ++) {
+				record[fieldIndex] = scanner.next();
+				if (fieldIndex == EmployeeSalesRep.SORT_BY_FIELD_INDEX) {
+					uniqueSortValues.add(record[fieldIndex]);
+				}
+			}
+			fileRecordsList.add(record);
+		}
+		String[][] fileRecords = fileRecordsList.toArray(new String[0][0]);
+		String[] recordGroups = uniqueSortValues.toArray(new String[0]);
 		Double totalSum = 0.0;
 		for (String sortByColumnValue: recordGroups) {
 			totalSum += EmployeeSalesRep.printRecordsForRecordGroupAndGetSum(fileRecords, sortByColumnValue);
@@ -38,40 +52,6 @@ public class EmployeeSalesRep {
 			System.exit(0);
 		}
 		return null;
-	}
-	
-	private static Integer getFileRecordCount() {
-		Scanner scanner = EmployeeSalesRep.getFileScanner();
-		Integer count = 0;
-		while (scanner.hasNextLine()) {
-			count ++;
-			scanner.nextLine();
-		}
-		scanner.close();
-		return count;
-	}
-	
-	private static String[][] getFileRecords(Integer recordCount) {
-		Scanner scanner = EmployeeSalesRep.getFileScanner();
-		String[][] records = new String[recordCount][EmployeeSalesRep.FIELD_NAMES.length];
-		for (Integer recordIndex = 0; recordIndex < recordCount; recordIndex ++) {
-			for (Integer fieldIndex = 0; fieldIndex < EmployeeSalesRep.FIELD_NAMES.length; fieldIndex ++) {
-				records[recordIndex][fieldIndex] = scanner.next();
-			}
-		}
-		scanner.close();
-		return records;
-	}
-	
-	private static ArrayList<String> getUniqueSortByFieldValues(String[][] fileRecords) {
-		ArrayList<String> values = new ArrayList<String>();
-		for (Integer index = 0; index < fileRecords.length; index ++) {
-			String value = fileRecords[index][EmployeeSalesRep.SORT_BY_FIELD_INDEX];
-			if (!(values.contains(value))) {
-				values.add(value);
-			}
-		}
-		return values;
 	}
 	
 	private static Double printRecordsForRecordGroupAndGetSum(String[][] fileRecords, String sortByColumnValue) {

@@ -21,8 +21,12 @@ public class Console {
 		}
 	}
 	
+	public static void printDebug(String message) {
+		System.out.printf("DEBUG: %s\n", message);
+	}
+	
 	public static void printError(String message) {
-		System.out.printf("ERROR: %s", message);
+		System.out.printf("ERROR: %s\n", message);
 	}
 	
 }
