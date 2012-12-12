@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 import convenience.Console;
@@ -20,6 +21,7 @@ public class EmployeeSalesRep {
 	public static void main(
 			String[] args) {
 		
+		// Store the number of field for convenience
 		Integer fieldCount = EmployeeSalesRep.FIELD_NAMES.length;
 		
 		// Create Array for storing column widths
@@ -28,24 +30,55 @@ public class EmployeeSalesRep {
 			columnWidths[columnIndex] = EmployeeSalesRep.FIELD_NAMES[columnIndex].length();
 		}
 		
-		// Read in Records from file
+		// Get the scanner for reading in the file
 		Scanner scanner = EmployeeSalesRep.getFileScanner();
+		
+		// Create collections for storing records and unique sort values
 		ArrayList<String[]> fileRecordsList = new ArrayList<String[]>();
 		HashSet<String> uniqueSortValues = new HashSet<String>();
+		
+		// Read in Records from file
 		while (scanner.hasNext()) {
+			
+			// Create a new array for storing the value of the fields for this record
 			String[] record = new String[fieldCount];
+			
+			// Read in field values for this record
 			for (Integer fieldIndex = 0; fieldIndex < fieldCount; fieldIndex ++) {
-				String fieldValue = scanner.next();
+				
+				// Read in Field Value from the file
+				String fieldValue = null;
+				try {
+					fieldValue = scanner.next();
+				} catch (NoSuchElementException e) {
+					// The file does not contain the correct number of entries
+					// Print error and terminate
+					Console.printError("Invalid format for the input file!");
+					System.exit(0);
+				}
+				
+				// Store field value in the array for the record
 				record[fieldIndex] = fieldValue;
+				
+				// If the field is the Sort By Field add it to the unique sort field set
 				if (fieldIndex == EmployeeSalesRep.SORT_BY_FIELD_INDEX) {
 					uniqueSortValues.add(fieldValue);
 				}
+				
+				// If column width of this field is greater than the current max column 
+				// width, change the max column width to the width of this field
 				if (fieldValue.length() > columnWidths[fieldIndex]) {
 					columnWidths[fieldIndex] = fieldValue.length();
 				}
+				
 			}
+			
+			// Store field values for this record to collection
 			fileRecordsList.add(record);
 		}
+		
+		// Convert the collection classes to arrays for convenient manipulation
+		// TODO: Eliminate this step, as it is unnecessary, wastes CPU time and memory
 		String[][] fileRecords = fileRecordsList.toArray(new String[0][0]);
 		String[] recordGroups = uniqueSortValues.toArray(new String[0]);
 		
@@ -55,11 +88,11 @@ public class EmployeeSalesRep {
 			sumByFieldPosition += columnWidths[columnIndex] + 1;
 		}
 		
-		// Generate Group Header and Footer
+		// Generate Group Header and Footer, to speed up execution time
 		String headerValue = EmployeeSalesRep.getRecordGroupHeader(columnWidths);
 		String footerValue = EmployeeSalesRep.getRecordGroupFooter(columnWidths, sumByFieldPosition);
 		
-		// Print Record Groups
+		// Print Record Groups and accumulate the total sum
 		Double totalSum = 0.0;
 		for (String sortByColumnValue: recordGroups) {
 			totalSum += EmployeeSalesRep.printRecordsForRecordGroupAndGetSum(fileRecords, sortByColumnValue, columnWidths, sumByFieldPosition, headerValue, footerValue);
@@ -70,6 +103,7 @@ public class EmployeeSalesRep {
 	}
 	
 	private static Scanner getFileScanner() {
+		
 		File file = new File(EmployeeSalesRep.FILE_NAME);
 		try {
 			Scanner scanner = new Scanner(file);
@@ -94,7 +128,16 @@ public class EmployeeSalesRep {
 		for (Integer recordIndex = 0; recordIndex < fileRecords.length; recordIndex ++) {
 			if ((fileRecords[recordIndex][EmployeeSalesRep.SORT_BY_FIELD_INDEX]).equals(sortByColumnValue)) {
 				EmployeeSalesRep.printRecordAtIndex(fileRecords, recordIndex, columnWidths);
-				sum += Double.parseDouble(fileRecords[recordIndex][EmployeeSalesRep.SUM_BY_FIELD_INDEX]);
+				try {
+					sum += Double.parseDouble(fileRecords[recordIndex][EmployeeSalesRep.SUM_BY_FIELD_INDEX]);
+				} catch (NumberFormatException e) {
+					// The sum by field value is not a proper double numeric value
+					// Print error and terminate
+					Console.printError("The " + EmployeeSalesRep.FIELD_NAMES[EmployeeSalesRep.SUM_BY_FIELD_INDEX] + 
+							" field for the record at line " + (recordIndex + 1) + " does not containe a valid decimal number!");
+					System.exit(0);
+				}
+				
 			}
 		}
 		System.out.printf(footerValue);
@@ -106,12 +149,14 @@ public class EmployeeSalesRep {
 			Integer[] columnWidths) {
 		
 		String results = "";
+		
 		// Print Field Names
 		for (Integer index = 0; index < EmployeeSalesRep.FIELD_NAMES.length; index ++) {
 			String printfCommandString = "%-" + columnWidths[index].toString() + "s ";
 			results += String.format(printfCommandString, EmployeeSalesRep.FIELD_NAMES[index]);
 		}
 		results += "\n";
+		
 		// Print Header Dashes
 		for (Integer index = 0; index < EmployeeSalesRep.FIELD_NAMES.length; index ++) {
 			for (Integer dashIndex = 0; dashIndex < columnWidths[index]; dashIndex ++) {
@@ -119,6 +164,7 @@ public class EmployeeSalesRep {
 			}
 			results += " ";
 		}
+		
 		return results + "\n";
 	}
 	
