@@ -150,7 +150,6 @@ public class EmployeeSalesRep {
 							" field for the record at line " + (recordIndex + 1) + " does not containe a valid decimal number!");
 					System.exit(0);
 				}
-				
 			}
 		}
 		System.out.printf(footerValue);
@@ -225,7 +224,6 @@ public class EmployeeSalesRep {
 		String sortByFieldName = EmployeeSalesRep.FIELD_NAMES[EmployeeSalesRep.SORT_BY_FIELD_INDEX];
 		String sumByFieldName = EmployeeSalesRep.FIELD_NAMES[EmployeeSalesRep.SUM_BY_FIELD_INDEX];
 		System.out.printf("Sorted by the \'%s\' field and summed by the \'%s\' field.\n\n", sortByFieldName, sumByFieldName);
-		
 	}
 	
 	private static void printFooter(
