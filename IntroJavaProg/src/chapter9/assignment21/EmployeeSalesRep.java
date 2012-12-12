@@ -11,7 +11,7 @@ import convenience.Console;
 
 public class EmployeeSalesRep {
 	
-	private static final String FILE_NAME = "EmployeeSalesRep.txt";
+	private static final String DEFAULT_FILE_NAME = "EmployeeSalesRep.txt";
 	private static final String[] FIELD_NAMES = {"Emp#", "Last Name", "First Name", "MI", "Rep", "Commission"};
 	private static final String HEADER_SEPERATOR_CHARACTER = "-";
 	private static final String FOOTER_SEPERATOR_CHARACTER = "=";
@@ -20,6 +20,9 @@ public class EmployeeSalesRep {
 	
 	public static void main(
 			String[] args) {
+		
+		// TODO: Add code to include the sum by total field column widths in the calculations
+		// for the column auto-sizing code.
 		
 		// Store the number of field for convenience
 		Integer fieldCount = EmployeeSalesRep.FIELD_NAMES.length;
@@ -30,8 +33,14 @@ public class EmployeeSalesRep {
 			columnWidths[columnIndex] = EmployeeSalesRep.FIELD_NAMES[columnIndex].length();
 		}
 		
-		// Get the scanner for reading in the file
-		Scanner scanner = EmployeeSalesRep.getFileScanner();
+		// Get the scanner for reading in the file, if no file name is contained in the first argument use the default
+		String fileName = "";
+		if (args.length < 1) {
+			fileName = EmployeeSalesRep.DEFAULT_FILE_NAME;
+		} else {
+			fileName = args[0];
+		}
+		Scanner scanner = EmployeeSalesRep.getFileScanner(fileName);
 		
 		// Create collections for storing records and unique sort values
 		ArrayList<String[]> fileRecordsList = new ArrayList<String[]>();
@@ -92,24 +101,28 @@ public class EmployeeSalesRep {
 		String headerValue = EmployeeSalesRep.getRecordGroupHeader(columnWidths);
 		String footerValue = EmployeeSalesRep.getRecordGroupFooter(columnWidths, sumByFieldPosition);
 		
+		// Print Header
+		EmployeeSalesRep.printHeader(fileName, fileRecords.length, recordGroups.length);
+		
 		// Print Record Groups and accumulate the total sum
 		Double totalSum = 0.0;
 		for (String sortByColumnValue: recordGroups) {
 			totalSum += EmployeeSalesRep.printRecordsForRecordGroupAndGetSum(fileRecords, sortByColumnValue, columnWidths, sumByFieldPosition, headerValue, footerValue);
 		}
 		
-		// Print Total Sum
+		// Print Footer
 		EmployeeSalesRep.printFooter(String.format("%.2f", totalSum), columnWidths, sumByFieldPosition);
 	}
 	
-	private static Scanner getFileScanner() {
+	private static Scanner getFileScanner(
+			String fileName) {
 		
-		File file = new File(EmployeeSalesRep.FILE_NAME);
+		File file = new File(fileName);
 		try {
 			Scanner scanner = new Scanner(file);
 			return scanner;
 		} catch (FileNotFoundException e) {
-			Console.printError("File Not Found!");
+			Console.printError("File: \'" + fileName + "\' Not Found!");
 			System.exit(0);
 		}
 		return null;
@@ -201,6 +214,18 @@ public class EmployeeSalesRep {
 		String printfCommandString = "%" + sumByFieldPosition.toString() + "s %-" + columnWidths[EmployeeSalesRep.SUM_BY_FIELD_INDEX].toString() + "s\n\n";
 		String leftString = "Total for " + EmployeeSalesRep.FIELD_NAMES[EmployeeSalesRep.SORT_BY_FIELD_INDEX] + " " + sortByColumnValue + ":";
 		System.out.printf(printfCommandString, leftString, sumByColumnValue);
+	}
+	
+	private static void printHeader(
+			String fileName,
+			Integer numberOfRecords,
+			Integer numberOfRecordGroups) {
+		
+		System.out.printf("Results for the file \'%s\' which contains %d records and %d record groups\n", fileName, numberOfRecords, numberOfRecordGroups);
+		String sortByFieldName = EmployeeSalesRep.FIELD_NAMES[EmployeeSalesRep.SORT_BY_FIELD_INDEX];
+		String sumByFieldName = EmployeeSalesRep.FIELD_NAMES[EmployeeSalesRep.SUM_BY_FIELD_INDEX];
+		System.out.printf("Sorted by the \'%s\' field and summed by the \'%s\' field.\n\n", sortByFieldName, sumByFieldName);
+		
 	}
 	
 	private static void printFooter(
